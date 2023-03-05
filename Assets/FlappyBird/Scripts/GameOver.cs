@@ -5,31 +5,46 @@ using UnityEngine.UI;
 public class GameOver : MonoBehaviour
 {
     [SerializeField]
-    private Image GameOverImage;
+    private Image _gameOverImage;
+
     [SerializeField]
-    private GameObject ResultWindow;
+    private GameObject _resultWindow;
+
+    [SerializeField]
+    private GameObject  _retryButtonObject;
+    private Image       _retryButtonImage;
+    private Button      _retryButton;
+
+    [SerializeField]
+    private Image _medalImage;
 
     private Image ResultWindowImage;
-
-    [SerializeField] 
-    private float _fadeInTime = 1f;
 
     // Start is called before the first frame update
     void Start()
     {
-        ResultWindowImage = ResultWindow.GetComponent<Image>();
+        // Result Window
+        ResultWindowImage = _resultWindow.GetComponent<Image>();
         ResultWindowImage.enabled = false;
-        ResultWindow.GetComponent<ResultWindow>().HideScore();
+        _resultWindow.GetComponent<ResultWindow>().HideScore();
 
-        GameOverImage.enabled = false;
+        // Button
+        _retryButtonImage = _retryButtonObject.GetComponent<Image>();
+        _retryButton = _retryButtonObject.GetComponent<Button>();
+
+        _retryButton.enabled = false;
+        _gameOverImage.enabled = false;
+        _medalImage.enabled = false;
         Color col = new Color(1, 1, 1, 0);
-        GameOverImage.color = col;
+        _gameOverImage.color = col;
+        _retryButtonImage.color = col;  
     }
 
     public void OnGameOverImage()
     {
-        GameOverImage.enabled = true;
+        _gameOverImage.enabled = true;
         ResultWindowImage.enabled = true;
+        _medalImage.enabled = true;
         StartCoroutine("FadeIn", 1);
     }
 
@@ -37,16 +52,17 @@ public class GameOver : MonoBehaviour
     {
         float t = 0f;
         Color col = new Color(1, 1, 1, 0);
+        _resultWindow.GetComponent<ResultWindow>().ShowScore(time);
         while (time > t)
         {
             t += Time.deltaTime;
             float alpha = Mathf.Lerp(0, 1, t / time);
             col.a = alpha;
-            GameOverImage.color = ResultWindowImage.color = col;
+            _gameOverImage.color = ResultWindowImage.color = _retryButtonImage.color = _medalImage.color = col;
             yield return null;
         }
         col.a = 1;
-        GameOverImage.color = ResultWindowImage.color = col;
-        ResultWindow.GetComponent<ResultWindow>().ShowScore();
+        _gameOverImage.color = ResultWindowImage.color = _retryButtonImage.color = _medalImage.color = col;
+        _retryButton.enabled = true;
     }
 }

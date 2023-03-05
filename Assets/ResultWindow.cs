@@ -11,11 +11,11 @@ public class ResultWindow : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _currentScoreTmp;
 
-    public void ShowScore()
+    public void ShowScore(float time)
     {
         _bestScoreTmp.enabled = true;
         _currentScoreTmp.enabled = true;
-        StartCoroutine("FadeInTmp",1f);
+        StartCoroutine("FadeInTmp",time);
     }
 
     IEnumerator FadeInTmp(float time)

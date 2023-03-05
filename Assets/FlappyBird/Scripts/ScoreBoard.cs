@@ -7,8 +7,10 @@ public class ScoreBoard : MonoBehaviour
 {
     [SerializeField]
     private TextMeshProUGUI _textMeshPro;
-    [SerializeField]
-    Score _currentScore;
+
+    int _currentScore = 0;
+
+    public int CurrentScore { get { return _currentScore; } }
 
 
     void Start()
@@ -23,8 +25,8 @@ public class ScoreBoard : MonoBehaviour
 
     public void IncreaseCount()
     {
-        _currentScore.score++;
-        _textMeshPro.text = _currentScore.score.ToString();
+        _currentScore++;
+        _textMeshPro.text = _currentScore.ToString();
     }
     public void HideScoreBoard()
     {

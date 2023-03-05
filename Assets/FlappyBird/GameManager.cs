@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +18,6 @@ public class GameManager : MonoBehaviour
     public Action GameOverAnimation;
     public Transform initPos;
 
-    public Score CurrentScore;
     public Score BestScore;
 
     // Start is called before the first frame update
@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         IsGameOver = true;
-        BestScore.score = Math.Max(BestScore.score, CurrentScore.score);
-        _resultWindow.GetComponent<ResultWindow>().SetScoreText(CurrentScore.score, BestScore.score);
+        int curScore = GetComponent<ScoreBoard>().CurrentScore;
+        BestScore.score = Math.Max(BestScore.score, curScore);
+        _resultWindow.GetComponent<ResultWindow>().SetScoreText(curScore, BestScore.score);
     }
 
     public void GameResume()

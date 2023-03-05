@@ -26,6 +26,15 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_isDie) return;
+        if(_rig2D.velocity.y > 0)
+        {
+            transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(transform.rotation.z, 30f, _rig2D.velocity.y/8f));
+        }
+        else
+        {
+            transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(transform.rotation.z, -90f, -_rig2D.velocity.y/8f));
+        }
         if(Input.GetKeyDown(KeyCode.V))
         {
             _renderer.material.EnableKeyword("HOLOGRAM_ON");
@@ -41,23 +50,16 @@ public class Player : MonoBehaviour
             _rig2D.AddForce(jumpVec);
         }
     }
-
-    private void FixedUpdate()
-    {
-
-    }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (_isDie == true) return;
 
         if (collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Ground"))
         {
-            if(collision.collider.CompareTag("Obstacle"))
+            _rig2D.constraints = RigidbodyConstraints2D.None;
+            _rig2D.velocity = Vector2.zero;
+            if (collision.collider.CompareTag("Obstacle"))
             {
-                _rig2D.constraints = RigidbodyConstraints2D.None;
-                _rig2D.velocity = Vector2.zero;
-                
                 Vector2 dir = (transform.position - collision.collider.transform.position).normalized;
                 float dotResult = Vector2.Dot(dir, collision.collider.transform.right);
                 Debug.Log(dotResult);
@@ -71,6 +73,12 @@ public class Player : MonoBehaviour
                     _rig2D.AddForce(Vector3.right * 4, ForceMode2D.Impulse);
                     _rig2D.AddTorque(-10f);
                 }
+            }
+            else
+            {
+                Vector2 force = new Vector2(1, 1) * 3;
+                _rig2D.AddForce(force, ForceMode2D.Impulse);
+                _rig2D.AddTorque(-10f);
             }
 
             _isDie = true;
