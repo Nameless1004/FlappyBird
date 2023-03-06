@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private GameObject _playerPrefab;
+
+
+    static public Player player;
+
     [SerializeField]
     private GameObject _resultWindow;
 
@@ -23,9 +27,10 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 144;
         IsGameOver = false;
         TimeManager.Instance.TimeScale = 1;
-        GameObject obj = Instantiate(_playerPrefab, initPos.position, Quaternion.identity);
+        player = Instantiate(_playerPrefab, initPos.position, Quaternion.identity).GetComponent<Player>();
         StartCoroutine("WaitReady");
     }
 
@@ -61,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     public void Retry()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(0);
     }
 
 }

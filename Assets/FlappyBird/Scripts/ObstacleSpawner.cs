@@ -57,7 +57,6 @@ public class ObstacleSpawner : MonoBehaviour
 
     public void Spawn()
     {
-        int n = Random.Range(0, 2);
         Vector3 offset = Vector3.zero;
         offset.y = Random.Range(_minRange, _maxRange);
 

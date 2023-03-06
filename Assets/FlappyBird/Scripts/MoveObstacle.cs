@@ -57,6 +57,6 @@ public class MoveObstacle : MonoBehaviour
             isActive = false;
         }
 
-        transform.position += MoveSpeed*Time.deltaTime* TimeManager.Instance.TimeScale * Vector3.left;
+        transform.position += MoveSpeed * Time.deltaTime * TimeManager.Instance.TimeScale * Vector3.left;
     }
 }

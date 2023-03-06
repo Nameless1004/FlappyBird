@@ -14,7 +14,11 @@ public class Player : MonoBehaviour
     private SpriteRenderer _renderer;
     private Rigidbody2D _rig2D;
     private Animator _animator;
-    public bool _isDie = false;
+    private bool _isDie = false;
+    private bool _isInvincibility = false;
+
+    public bool IsInvincibility { get { return _isInvincibility; } set { _isInvincibility = value; } }
+    public SpriteRenderer Renderer { get { return _renderer; } }
 
     void Start()
     {
@@ -35,14 +39,7 @@ public class Player : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(0, 0, Mathf.Lerp(transform.rotation.z, -90f, -_rig2D.velocity.y/8f));
         }
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            _renderer.material.EnableKeyword("HOLOGRAM_ON");
-        }
-        if (Input.GetKeyUp(KeyCode.V))
-        {
-            _renderer.material.DisableKeyword("HOLOGRAM_ON");
-        }
+
         if (Input.GetKeyDown(KeyCode.Space) && _isDie == false)
         {
             _rig2D.velocity = Vector2.zero;
@@ -52,6 +49,8 @@ public class Player : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (_isInvincibility == true) return;
+
         if (_isDie == true) return;
 
         if (collision.collider.CompareTag("Obstacle") || collision.collider.CompareTag("Ground"))
@@ -62,7 +61,6 @@ public class Player : MonoBehaviour
             {
                 Vector2 dir = (transform.position - collision.collider.transform.position).normalized;
                 float dotResult = Vector2.Dot(dir, collision.collider.transform.right);
-                Debug.Log(dotResult);
                 if (dotResult < 0f)
                 {
                     _rig2D.AddForce(Vector3.left * 4, ForceMode2D.Impulse);
